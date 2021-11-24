@@ -1,0 +1,22 @@
+{
+    "name": "henrikac/csv",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-4": {
+            "Henrikac\\CSV\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Henrik Christensen",
+            "email": "sensen1695@hotmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
