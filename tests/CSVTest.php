@@ -36,11 +36,27 @@ class CSVTest extends TestCase {
 		$this->assertEmpty($csv->getRows());
 	}
 
-	public function testRowsAreSetCorrectly(): void {
-		$rows = array(array("1", "Alice", "23"), array("2", "Bob", "23"));
+	public function testRowCanBeAdded(): void {
+		$rows = array(array("1", "Alice", "23"));
 		$csv = new CSV\CSV();
 
-		$csv->setRows($rows);
+		$csv->addRow(array("1", "Alice", "23"));
+
+		$this->assertEquals(
+			$rows,
+			$csv->getRows()
+		);
+	}
+
+	public function testRowsCanBeAdded(): void {
+		$rows = array(
+			array("1", "Alice", "23"),
+			array("2", "Bob", "31"),
+			array("3", "Eve", "17")
+		);
+		$csv = new CSV\CSV();
+
+		$csv->addRows($rows);
 
 		$this->assertEquals(
 			$rows,
@@ -94,7 +110,7 @@ class CSVTest extends TestCase {
 		$filename = "./tests/data/write.csv";
 		$csv = new CSV\CSV();
 		$csv->setHeaders($headers);
-		$csv->setRows($rows);
+		$csv->addRows($rows);
 
 		$csv->write($filename);
 
