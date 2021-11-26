@@ -12,6 +12,56 @@ class CSVTest extends TestCase {
 		);
 	}
 
+	public function testRowCanBeAccessedByIndex(): void {
+		$rows = array(
+			array("1", "Alice", "23"),
+			array("2", "Bob", "31"),
+			array("3", "Eve", "17")
+		);
+		$csv = new CSV\CSV();
+		$csv->addRows($rows);
+
+		$this->assertEquals(
+			array("2", "Bob", "31"),
+			$csv[1]
+		);
+	}
+
+	public function testOffsetGetThrowsInvalidArgumentExceptionIfNotAnInt(): void {
+		$rows = array(
+			array("1", "Alice", "23"),
+			array("2", "Bob", "31"),
+			array("3", "Eve", "17")
+		);
+		$csv = new CSV\CSV();
+		$csv->addRows($rows);
+		
+		$this->expectException(InvalidArgumentException::class);
+		$csv["bob"];
+	}
+
+	public function testOffsetGetThrowsOutOfRangeException(): void {
+		$csv = new CSV\CSV();
+		
+		$this->expectException(OutOfRangeException::class);
+		$csv[-1];
+	}
+
+	public function testCSVIsCountable(): void {
+		$rows = array(
+			array("1", "Alice", "23"),
+			array("2", "Bob", "31"),
+			array("3", "Eve", "17")
+		);
+		$csv = new CSV\CSV();
+		$csv->addRows($rows);
+
+		$this->assertEquals(
+			count($rows),
+			count($csv)
+		);
+	}
+
 	public function testNewCSVHeadersAreEmpty(): void {
 		$csv = new CSV\CSV();
 

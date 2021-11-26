@@ -13,7 +13,7 @@ namespace CSV;
  * $csv->addRow(array("col1", "col2", "col3"));
  * $csv->write("my-csv-file");
  */
-class CSV {
+class CSV implements \ArrayAccess, \Countable, \IteratorAggregate {
 	const DEFAULT_SEPARATOR = ",";
 
 	/**
@@ -36,6 +36,83 @@ class CSV {
 	public function __construct() {
 		$this->headers = array();
 		$this->rows = array();
+	}
+
+	/**
+	 * Appends a row to the CSV
+	 *
+	 * Example usage:
+	 * $csv = new CSV\CSV();
+	 * $csv[] = array("1", "Alice", "84");
+	 *
+	 * @param null $offset 
+	 * @param array $value
+	 * @exception \InvalidArgumentException if $offset is not null
+	 */
+	public function offsetSet($offset, $value) {
+		if (!is_null($offset)) {
+			throw new \InvalidArgumentException("invalid offset");
+		}
+
+		$this->rows[] = $value;
+	}
+
+	/**
+	 * Returns whether a row at the given offset exists. This should always return
+	 * true, if no exception is thrown
+	 *
+	 * @param int $offset
+	 * @return bool
+	 * @exception \InvalidArgumentException if $offset is not an int
+	 * @exception \OutOfRangeException
+	 */
+	public function offsetExists($offset) {
+		$this->throwIfInvalidOffset($offset);
+
+		return isset($this->rows[$offset]);
+	}
+
+	/**
+	 * Removes a row at the given offset
+	 *
+	 * @param int $offset
+	 * @exception \InvalidArgumentException if $offset is not an int
+	 * @exception \OutOfRangeException
+	 */
+	public function offsetUnset($offset) {
+		$this->throwIfInvalidOffset($offset);
+
+		unset($this->rows[$offset]);
+	}
+
+	/**
+	 * Returns the row at the given offset
+	 *
+	 * @param int $offset
+	 * @return array
+	 * @exception \InvalidArgumentException if $offset is not an int
+	 * @exception \OutOfRangeException
+	 */
+	public function offsetGet($offset) {
+		$this->throwIfInvalidOffset($offset);
+
+		return $this->rows[$offset];
+	}
+
+	/**
+	 * Returns the number of rows in the CSV
+	 *
+	 * @return int
+	 */
+	public function count(): int {
+		return count($this->rows);
+	}
+
+	/**
+	 * Implements \IteratorAggregate
+	 */
+	public function getIterator(): \Traversable {
+		return new \ArrayIterator($this->rows);
 	}
 
 	/**
@@ -137,5 +214,15 @@ class CSV {
 		}
 
 		fclose($file);
+	}
+
+	private function throwIfInvalidOffset(mixed $offset): void {
+		if (!is_int($offset)) {
+			throw new \InvalidArgumentException("offset must be an int");
+		}
+
+		if ($offset < 0 || $offset > count($this->rows) - 1) {
+			throw new \OutOfRangeException("index out of range");
+		}
 	}
 }
