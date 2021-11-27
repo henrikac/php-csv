@@ -1,10 +1,37 @@
 # php-csv
 
-TODO: Write description here
+Package that makes it easy to read and write data to csv files.
 
 ## Usage
 
-TODO: Write usage instructions here
+#### Basic usage
+
+```php
+<?php
+
+$data = array(
+	array("1", "Alice", "23"),
+	array("2", "Bob", "42"),
+	array("3", "Eve", "8")
+);
+
+$csv = new CSV\CSV();
+
+$csv->setHeaders(array("id", "name", "age"));
+$csv->addRows($data);
+
+foreach ($csv as $row) {
+	print_r($row);
+}
+
+$csv[1]; // => array("2", "Bob", "42")
+count($csv); // => 3
+
+$csv[] = array("4", "John", "89");
+count($csv); // => 4
+
+$csv->write("my-csv-file");
+```
 
 ## Contributing
 
