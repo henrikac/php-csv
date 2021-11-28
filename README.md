@@ -21,10 +21,10 @@ $csv->setHeaders(array("id", "name", "age"));
 $csv->addRows($data);
 
 foreach ($csv as $row) {
-	print_r($row);
+	echo $row;
 }
 
-$csv[1]; // => array("2", "Bob", "42")
+$csv[1]; // => CSV\Row("2", "Bob", "42")
 count($csv); // => 3
 
 $csv[] = array("4", "John", "89");
