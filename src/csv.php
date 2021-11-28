@@ -159,7 +159,7 @@ class CSV implements \ArrayAccess, \Countable, \IteratorAggregate {
 	 * @param array $row
 	 */
 	public function addRow(array $row): void {
-		array_push($this->rows, $row);
+		array_push($this->rows, new Row($row));
 	}
 
 	/**
@@ -209,7 +209,7 @@ class CSV implements \ArrayAccess, \Countable, \IteratorAggregate {
 
 		if (count($this->rows) > 0) {
 			foreach ($this->rows as $row) {
-				fwrite($file, implode($sep, $row).PHP_EOL);
+				fwrite($file, implode($sep, $row->getItems()).PHP_EOL);
 			}
 		}
 

@@ -22,7 +22,7 @@ class CSVTest extends TestCase {
 		$csv->addRows($rows);
 
 		$this->assertEquals(
-			array("2", "Bob", "31"),
+			new CSV\Row(array("2", "Bob", "31")),
 			$csv[1]
 		);
 	}
@@ -87,7 +87,7 @@ class CSVTest extends TestCase {
 	}
 
 	public function testRowCanBeAdded(): void {
-		$rows = array(array("1", "Alice", "23"));
+		$rows = array(new CSV\Row(array("1", "Alice", "23")));
 		$csv = new CSV\CSV();
 
 		$csv->addRow(array("1", "Alice", "23"));
@@ -104,12 +104,17 @@ class CSVTest extends TestCase {
 			array("2", "Bob", "31"),
 			array("3", "Eve", "17")
 		);
+		$expectedRows = array(
+			new CSV\Row(array("1", "Alice", "23")),
+			new CSV\Row(array("2", "Bob", "31")),
+			new CSV\Row(array("3", "Eve", "17"))
+		);
 		$csv = new CSV\CSV();
 
 		$csv->addRows($rows);
 
 		$this->assertEquals(
-			$rows,
+			$expectedRows,
 			$csv->getRows()
 		);
 	}
@@ -117,9 +122,9 @@ class CSVTest extends TestCase {
 	public function testCanReadCSVFile(): void {
 		$expectedHeaders = array("id", "name", "age");
 		$expectedRows = array(
-			array("1", "Alice", "23"),
-			array("2", "Bob", "31"),
-			array("3", "Eve", "17")
+			new CSV\Row(array("1", "Alice", "23")),
+			new CSV\Row(array("2", "Bob", "31")),
+			new CSV\Row(array("3", "Eve", "17"))
 		);
 		$csv = new CSV\CSV();
 
